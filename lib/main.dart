@@ -1,7 +1,4 @@
 import 'package:black_hole/try_paint_anim.dart';
-import 'package:black_hole/try_painter.dart';
-import 'package:black_hole/waves_anim.dart';
-import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -17,7 +14,14 @@ class MyApp extends StatelessWidget {
           color: Colors.red,
           width: double.infinity,
           height: 400,
-          child: TryPaintAnim(),
+          child: Stack(
+            children: [
+              Positioned.fill(child: TryPaintAnim()),
+              Positioned.fill(child: TryPaintAnim()),
+              Positioned.fill(child: TryPaintAnim()),
+              Positioned.fill(child: TryPaintAnim()),
+            ],
+          ),
         ),
       ),
     );

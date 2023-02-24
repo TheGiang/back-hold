@@ -11,12 +11,10 @@ class TryPaintAnim extends StatefulWidget {
 }
 
 class _TryPaintAnimState extends State<TryPaintAnim>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
-
   late Animation<double> curve;
-
-  late Animation alpha;
+  late Animation<double> alpha;
 
   List<double> waveHeights = [];
   List<double> waveWidths = [];
@@ -26,8 +24,11 @@ class _TryPaintAnimState extends State<TryPaintAnim>
   void initState() {
     super.initState();
     tryPaint();
+
+    Random _rdm = Random();
+    final sec = _rdm.nextInt(5) + 5;
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: Duration(seconds: sec),
       vsync: this,
     )
       ..addStatusListener((status) {
@@ -40,7 +41,7 @@ class _TryPaintAnimState extends State<TryPaintAnim>
       })
       ..forward();
 
-    curve = CurvedAnimation(parent: _controller, curve: Curves.linear);
+    curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack);
     alpha = Tween<double>(begin: 0, end: 1.0).animate(curve);
   }
 
@@ -58,11 +59,14 @@ class _TryPaintAnimState extends State<TryPaintAnim>
         // print('giang.pt1 AnimatedBuilder::${alpha.value}');
         //
         // print('giang.pt1 _controller.status2::${_controller.status}');
-        return CustomPaint(
-          painter: TryPainter(
-              waveHeights: waveHeights,
-              waveWidths: waveWidths,
-              animValue: alpha.value),
+        return RotationTransition(
+          turns: alpha,
+          child: CustomPaint(
+            painter: TryPainter(
+                waveHeights: waveHeights,
+                waveWidths: waveWidths,
+                animValue: alpha.value),
+          ),
         );
       },
     );
@@ -75,7 +79,9 @@ class _TryPaintAnimState extends State<TryPaintAnim>
 
     Random _rdm = Random();
 
-    int totalOfPoint = _rdm.nextInt(5) + 5;
+    int totalOfPoint = _rdm.nextInt(2) * 2 + 4;
+
+    totalOfPoint = 6;
 
     double curWidth = 0;
     double step = 360 / totalOfPoint / 2;
@@ -83,8 +89,8 @@ class _TryPaintAnimState extends State<TryPaintAnim>
     double totalOfHeight = 0;
 
     for (int i = 0; i < totalOfPoint; i++) {
-      double tmp = _rdm.nextInt(1) + 1;
-      tmp=1;
+      double tmp = _rdm.nextInt(10) + (50 / totalOfPoint);
+      // tmp = 10;
       waveHeights.add((tmp * (isCurveTop ? 1 : -1)));
       waveHeights.add(0);
       totalOfHeight += tmp;

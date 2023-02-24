@@ -13,7 +13,8 @@ class TryPainter extends CustomPainter {
 
   final Paint _paint = Paint()
     ..color = Colors.black
-    ..strokeWidth = 4.0
+    ..strokeWidth = 2.0
+    ..
     ..style = PaintingStyle.stroke
     ..strokeJoin = StrokeJoin.round;
 
@@ -40,7 +41,7 @@ class TryPainter extends CustomPainter {
     // }
     double rad = (waveWidths[0] / 360) * (2 * pi);
 
-    path.moveTo(size.width / 2, size.height / 2 + (cos(rad) * R));
+    path.moveTo(size.width / 2 + R, size.height / 2);
     // path.lineTo(size.width/2, size.height/2);
     // double R = 200;
     // for (int i = 0; i <= 200; i++) {
@@ -49,19 +50,30 @@ class TryPainter extends CustomPainter {
     //   path.lineTo(x+size.width/2, y+size.height/2);
     // }
     // path.lineTo(size.width/2, size.height/2);
-
+    // animValue = 0;
     double x1, y1, x2, y2;
-    path.lineTo(size.width / 2, size.height / 2 + (cos(rad) * R));
+    // path.lineTo(size.width / 2 + R + 100, size.height / 2 + R);
     for (int i = 0; i < totalOfPoint; i++) {
-      double rad = (waveWidths[2 * i] / 360) * (2 * pi);
+      double h =
+          sqrt(2 * pow(R, 2) * (1 - cos((180 - waveWidths[2 * i]) * (2 * pi))));
+
+      // print('giang.pt1 ${cos((waveWidths[2 * i] / 180) * (2 * pi))}');
+
+      double rad1 = (waveWidths[2 * i] / 360) * (2 * pi);
 
       // print('pi::$rad');
+      h = waveHeights[2 * i].isNegative ? -h : h;
 
-      x1 = sin(rad) * (R + waveHeights[2 * i]);
-      y1 = cos(rad) * ((R + waveHeights[2 * i] )* animValue);
+      final R1 = R + (R / (2 * pi)) + (waveHeights[2 * i] * animValue);
 
-      x2 = sin(rad) * (R + waveHeights[2 * i + 1]);
-      y2 = cos(rad) * (R + waveHeights[2 * i + 1]);
+      x1 = cos(rad1) * R1;
+      y1 = sin(rad1) * R1;
+
+      double rad2 = (waveWidths[2 * i + 1] / 360) * (2 * pi);
+      final R2 = R + (waveHeights[2 * i + 1] * animValue);
+
+      x2 = cos(rad2) * R2;
+      y2 = sin(rad2) * R2;
 
       // path.lineTo(x+size.width/2, y+size.height/2);
 
@@ -73,7 +85,7 @@ class TryPainter extends CustomPainter {
       );
     }
 
-    path.lineTo(size.width / 2, size.height / 2 + (cos(rad) * R));
+    // path.lineTo(size.width / 2, size.height / 2 + R);
     path.close();
     canvas.drawPath(path, _paint);
   }
